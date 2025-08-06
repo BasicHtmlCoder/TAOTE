@@ -3,8 +3,6 @@ import TAOTE from "./TAOTE";
 import * as a from "../GeneratorCanvas/animation"
 import * as f from "../GeneratorCanvas/frame"
 
-const square = new f.Rect(0, 0, 100, 100, a.HexColor("#e6e2e1"));
-
 const exhaustion: number = 2; // Seconds we consider it Infinite already
 const condition1 = (value: number): boolean => value == 0 || value > 0;
 const condition2 = (value: number): boolean => value > 300;
@@ -72,25 +70,31 @@ for (let n of context.AUntilB({ generatorA, generatorB, conditionA: condition1, 
 // TESTING visualization library
 
 window.addEventListener("load", () => {
-  const canvas = <HTMLCanvasElement> document.getElementById("animation");
+  const canvas = <HTMLCanvasElement>document.getElementById("animation");
   const player = new a.AnimationPlayer(canvas);
+  
   player.Resize(800, 600);
   player.Play(Animation);
 });
 
 function* Animation(c) {
-  const square = new f.Rect(0, 0, 100, 100, a.HexColor("#e6e2e1"));
-
-  const radius = 100;
-  const rotSpeed = Math.PI;
-
-  let rot = 0;
-  while (true) {
-      rot += c.stats.dt * rotSpeed;
-      square.x = Math.cos(rot) * radius - square.w/2;
-      square.y = Math.sin(rot) * radius - square.h/2;
-
-      c.ctx.translate(c.width/2, c.height/2);
-      yield square;
+  const square = new f.Rect(0, 0, 30, 30, a.HexColor("#000000")); 
+  // context.delayedGenerator({ generator: app.naturals })
+  for (let n of context.repeater({ generator: app.naturals, round: 100 })) {
+    square.x = n * 10
+    square.y = 1
+    yield square;
   }
 }
+
+function WrapPromise(promise) { 
+  const wrap = { 
+      resolved: false, value: undefined, 
+      rejected: false, error: undefined, 
+      promise 
+  }; 
+
+  promise.then(val  => {wrap.resolved = true; wrap.value = val;}) 
+         .catch(err => {wrap.rejected = true; wrap.error = err;}); 
+  return Object.defineProperty(wrap, "done", { get() { return this.resolved || this.rejected; } }); 
+} 

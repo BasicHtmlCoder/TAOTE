@@ -21,12 +21,12 @@ class Generators {
     }
   }
 
-  *naturals(self: Generators): Generator<number, void, unknown> {
+  *naturals(): Generator<number> {
     let index = 0;
     while (true) yield index++;
   }
 
-  *negatives(self: Generators): Generator<number, void, unknown> {
+  *negatives(): Generator<number, void, unknown> {
     let index = 0;
     while (true) yield index--;
   }

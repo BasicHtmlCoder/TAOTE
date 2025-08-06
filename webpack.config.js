@@ -24,5 +24,6 @@ export default {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  // watch: true,
   // plugins: [new HtmlWebpackPlugin()],
 };
